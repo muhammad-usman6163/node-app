@@ -9,14 +9,16 @@ pipeline {
         }
         stage('test') {
             steps {
-                echo 'Test Stage'
+                echo 'Test stage'
             }
         }
         stage('deploy') {
             steps {
-                echo 'Deployment'
+                def dockerCMD = "docker run -p 3000:3000 -d  musman6163/my-repo:v2"
+                sshagent(['ec2-server-key']) {
+                    sh "ssh ec2-user@15.168.13.66 ${dockerCMD}"
+               }
             }
         }
     }
 }
-
